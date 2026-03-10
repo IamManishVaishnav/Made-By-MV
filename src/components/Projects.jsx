@@ -1,103 +1,217 @@
+import { useState } from 'react'
+import { Link } from 'react-router-dom'
 import { useInView } from '../hooks/useInView'
 import { projects } from '../data/content'
 import SectionLabel from './SectionLabel'
 
-function ProjectCard({ project, i, inView }) {
-  return (
-    <div
-      data-cursor="VIEW"
-      className="bg-card rounded-[14px] overflow-hidden flex flex-col transition-all duration-250"
-      style={{
-        border: '1px solid rgba(255,255,255,0.05)',
-        opacity: inView ? 1 : 0,
-        transform: inView ? 'translateY(0)' : 'translateY(32px)',
-        transition: `opacity 0.6s ease ${0.1 + i * 0.12}s, transform 0.6s ease ${0.1 + i * 0.12}s, border-color 0.25s, box-shadow 0.25s`,
-      }}
-      onMouseEnter={e => { e.currentTarget.style.borderColor = 'rgba(61,126,255,0.3)'; e.currentTarget.style.transform = 'translateY(-6px)'; e.currentTarget.style.boxShadow = '0 20px 48px rgba(0,0,0,0.5), 0 0 40px rgba(61,126,255,0.08)' }}
-      onMouseLeave={e => { e.currentTarget.style.borderColor = 'rgba(255,255,255,0.05)'; e.currentTarget.style.transform = 'translateY(0)'; e.currentTarget.style.boxShadow = 'none' }}
-    >
-      {/* Image */}
-      <div className="h-[200px] relative overflow-hidden flex items-center justify-center"
-        style={{ background: 'linear-gradient(135deg, #080c1a, #080a14)' }}>
-        {/* grid texture */}
-        <div className="absolute inset-0 pointer-events-none"
-          style={{
-            backgroundImage: 'linear-gradient(rgba(61,126,255,0.06) 1px, transparent 1px), linear-gradient(90deg, rgba(61,126,255,0.06) 1px, transparent 1px)',
-            backgroundSize: '22px 22px',
-          }} />
-        {/* center glow */}
-        <div className="absolute inset-0 pointer-events-none"
-          style={{ background: 'radial-gradient(ellipse at 50% 50%, rgba(61,126,255,0.09), transparent 65%)' }} />
-        <span className="font-mono text-[9px] text-blue/25 tracking-[0.15em] relative z-10">mockup</span>
-        <span
-          className="absolute top-3 right-3 font-mono text-[8px] tracking-[0.12em] uppercase text-cyan z-10"
-          style={{ padding: '3px 9px', background: 'rgba(0,229,255,0.07)', border: '1px solid rgba(0,229,255,0.2)', borderRadius: '4px' }}
-        >
-          {project.category}
-        </span>
-      </div>
+const CAT = {
+  'UI/UX':       { color: '#6eb3ff', bg: 'rgba(61,126,255,0.06)',  border: 'rgba(61,126,255,0.18)',  glow: 'rgba(61,126,255,0.07)'  },
+  'Development': { color: '#6eb3ff', bg: 'rgba(0,229,255,0.05)',   border: 'rgba(0,229,255,0.15)',   glow: 'rgba(0,229,255,0.05)'   },
+  'Graphics':    { color: '#6eb3ff', bg: 'rgba(167,139,250,0.05)', border: 'rgba(167,139,250,0.15)', glow: 'rgba(167,139,250,0.05)' },
+}
 
-      {/* Body */}
-      <div className="p-[22px] flex flex-col flex-1">
-        <h3 className="font-display font-bold text-[19px] text-text leading-[1.2]">{project.title}</h3>
-        <p className="font-mono text-[9px] text-blue tracking-[0.1em] mt-[3px] mb-3">{project.subtitle}</p>
-        <p className="font-body font-light text-[13px] text-mid leading-[1.65] flex-1 mb-[18px]">{project.description}</p>
-        <div className="flex items-center justify-between gap-3">
-          <div className="flex flex-wrap gap-[5px]">
+function ProjectRow({ project, i, inView }) {
+  const [hovered, setHovered] = useState(false)
+  const cat = CAT[project.category] || CAT['UI/UX']
+  const isExternal = project.link.startsWith('http')
+
+  const inner = (
+    <div
+      className="relative overflow-hidden"
+      style={{
+        borderTop:  '1px solid rgba(255,255,255,0.05)',
+        padding:    `${hovered ? 28 : 20}px clamp(20px,5vw,64px)`,
+        background: hovered
+          ? `radial-gradient(ellipse 70% 120% at 55% 50%, ${cat.glow}, transparent 70%)`
+          : 'transparent',
+        transition: 'padding 0.35s cubic-bezier(0.22,1,0.36,1), background 0.4s ease',
+      }}
+    >
+      {/* left accent line */}
+      <div
+        className="absolute left-0 top-0 bottom-0 w-[2px] transition-all duration-300"
+        style={{
+          background: `linear-gradient(to bottom, transparent, ${cat.color}, transparent)`,
+          opacity:    hovered ? 1 : 0,
+          boxShadow:  hovered ? `2px 0 10px ${cat.color}` : 'none',
+        }}
+      />
+
+      {/* main row */}
+      <div className="relative z-10 flex items-center gap-8">
+
+        {/* index */}
+        <span
+          className="font-mono flex-shrink-0 transition-all duration-300"
+          style={{
+            fontSize:   '11px',
+            color: hovered ? cat.color : "blue",
+            width:      '26px',
+            fontWeight: hovered ? 900 : 500,
+          }}
+        >
+          {project.index}
+        </span>
+
+        {/* title + tags block */}
+        <div className="flex-1 min-w-0">
+          {/* title */}
+          <span
+            className="font-display font-black text-white leading-none tracking-[-0.02em] block"
+            style={{
+              color: hovered ? cat.color : "white",
+              fontSize: hovered ? 'clamp(26px,3.5vw,70px)' : 'clamp(20px,2.6vw,50px)',
+              transition: 'font-size 0.35s cubic-bezier(0.22,1,0.36,1)',
+            }}
+          >
+            {project.title}
+          </span>
+
+          {/* tags — always visible below title */}
+          <div className="flex flex-wrap gap-[6px] mt-[8px]">
             {project.tags.map((tag, j) => (
-              <span key={j} className="font-mono text-[8px] text-dim rounded-[3px]"
-                style={{ padding: '2px 7px', background: 'rgba(255,255,255,0.02)', border: '1px solid rgba(255,255,255,0.05)' }}>
+              <span
+                key={j}
+                className="font-mono text-[9px] tracking-[0.08em] rounded-[4px] transition-all duration-300"
+                style={{
+                  padding:    '3px 9px',
+                  background: hovered ? cat.bg    : 'rgba(255,255,255,0.02)',
+                  border:     `1px solid ${hovered ? cat.border : 'rgba(255,255,255,0.04)'}`,
+                  color:      hovered ? cat.color : '#5a6490',
+                }}
+              >
                 {tag}
               </span>
             ))}
           </div>
-          <a
-            href={project.link}
-            data-cursor="OPEN"
-            className="font-mono text-[10px] text-blue tracking-[0.08em] flex-shrink-0 transition-colors duration-200 hover:text-text"
+        </div>
+
+        {/* image overlay — center of row, fades in on hover */}
+        <div
+          className="absolute pointer-events-none"
+          style={{
+            left:       '45%',
+            top:        '50%',
+            transform: hovered ? 'translate(-50%, -50%) scale(1) rotate(-4deg)' : 'translate(-50%, -50%) scale(0.92) rotate(-4deg)',
+            width:  '420px',
+            height: '220px',
+            opacity:    hovered ? 1 : 0,
+            transition: 'opacity 0.35s ease, transform 0.4s cubic-bezier(0.22,1,0.36,1)',
+            borderRadius: '8px',
+            overflow:   'hidden',
+            border:     `3px solid ${cat.border}`,
+            boxShadow: `0 16px 80px rgba(0,0,0,0.8), 0 0 50px ${cat.glow}, 0 0 100px ${cat.glow}`,
+            zIndex:     20,
+          }}
+        >
+          {/* grid texture bg */}
+          <div className="absolute inset-0" style={{ background: 'linear-gradient(135deg, #080c1a, #060810)' }} />
+          <div className="absolute inset-0" style={{ backgroundImage: 'linear-gradient(rgba(61,126,255,0.06) 1px, transparent 1px), linear-gradient(90deg, rgba(61,126,255,0.06) 1px, transparent 1px)', backgroundSize: '18px 18px' }} />
+          <div className="absolute inset-0" style={{ background: `radial-gradient(ellipse at 50% 50%, ${cat.glow}, transparent 60%)` }} />
+          <div className="absolute inset-0 flex items-center justify-center">
+            <span className="font-mono text-[8px] tracking-[0.15em]" style={{ color: `${cat.color}44` }}>mockup.png</span>
+          </div>
+        </div>
+
+        {/* right side — category + year + view button */}
+        <div className="flex items-center gap-4 flex-shrink-0">
+          <span className="font-mono text-[10px] text-dim hidden md:block">{project.year}</span>
+
+          {/* View Project button — appears on hover */}
+          <div
+            style={{
+              opacity:    hovered ? 1 : 0,
+              transform:  hovered ? 'translateY(0)' : 'translateY(6px)',
+              transition: 'opacity 0.3s ease, transform 0.3s cubic-bezier(0.22,1,0.36,1)',
+            }}
           >
-            View ↗
-          </a>
+            <span
+              className="font-mono text-[9px] tracking-[0.1em] uppercase rounded-[5px] flex items-center gap-2"
+              style={{
+                padding:    '7px 14px',
+                background: cat.color,
+                border:     `1px solid ${cat.border}`,
+                color:      '#020208',
+              }}
+            >
+              View Project
+              <span style={{ fontSize: '11px' }}>↗</span>
+            </span>
+          </div>
+
+          {/* arrow — default state */}
+          <span
+            className="font-mono text-[20px] flex-shrink-0 transition-all duration-300"
+            style={{
+              color:      hovered ? 'transparent' : '#8892b0',
+              transform:  hovered ? 'translate(3px,-3px)' : 'translate(0,0)',
+              position:   'relative',
+            }}
+          >
+            ↗
+          </span>
         </div>
       </div>
+    </div>
+  )
+
+  const sharedProps = {
+    'data-cursor': 'VIEW',
+    onMouseEnter: () => setHovered(true),
+    onMouseLeave: () => setHovered(false),
+    style: { display: 'block', textDecoration: 'none' },
+  }
+
+  return (
+    <div style={{
+      opacity:    inView ? 1 : 0,
+      transform:  inView ? 'translateY(0)' : 'translateY(18px)',
+      transition: `opacity 0.55s ease ${i * 0.07}s, transform 0.55s ease ${i * 0.07}s`,
+    }}>
+      {isExternal
+        ? <a href={project.link} target="_blank" rel="noopener noreferrer" {...sharedProps}>{inner}</a>
+        : <Link to={project.link} {...sharedProps}>{inner}</Link>
+      }
     </div>
   )
 }
 
 export default function Projects() {
   const { ref, inView } = useInView()
+  const featured = projects.filter(p => p.featured)
 
   return (
-    <section
-      id="projects"
-      ref={ref}
-      className="relative bg-bg"
-      style={{ padding: 'clamp(80px,12vw,130px) clamp(20px,5vw,64px)' }}
-    >
+    <section id="projects" ref={ref} className="relative bg-bg" style={{ padding: 'clamp(80px,12vw,130px) 0' }}>
       <div className="absolute top-0 left-0 right-0 h-px pointer-events-none"
         style={{ background: 'linear-gradient(90deg, transparent, rgba(61,126,255,0.18), rgba(0,229,255,0.1), transparent)' }} />
 
-      <div className="max-w-[1200px] mx-auto">
-        <div className="flex items-end justify-between mb-12 flex-wrap gap-4" style={{ opacity: inView ? 1 : 0, transition: 'opacity 0.6s ease' }}>
-          <div>
-            <SectionLabel>Selected Work</SectionLabel>
-            <h2 className="font-display font-black text-text tracking-[-0.01em] leading-none" style={{ fontSize: 'clamp(28px,4vw,44px)' }}>Projects</h2>
-          </div>
-          <a
-            href="/archive"
-            data-cursor="EXPLORE"
-            className="font-mono text-[10px] text-blue tracking-[0.1em] uppercase transition-all duration-200"
-            style={{ padding: '9px 18px', border: '1px solid rgba(61,126,255,0.2)', borderRadius: '6px' }}
-            onMouseEnter={e => { e.currentTarget.style.background = 'rgba(61,126,255,0.08)'; e.currentTarget.style.borderColor = 'rgba(61,126,255,0.4)' }}
-            onMouseLeave={e => { e.currentTarget.style.background = 'transparent'; e.currentTarget.style.borderColor = 'rgba(61,126,255,0.2)' }}
-          >
-            Explore All ↗
-          </a>
+      {/* header */}
+      <div
+        className="flex items-end justify-between mb-10 flex-wrap gap-4"
+        style={{ padding: '0 clamp(20px,5vw,64px)', opacity: inView ? 1 : 0, transition: 'opacity 0.6s ease' }}
+      >
+        <div>
+          <SectionLabel>Selected Work</SectionLabel>
+          <h2 className="font-display font-black text-text tracking-[-0.01em] leading-none" style={{ fontSize: 'clamp(28px,4vw,44px)' }}>
+            Projects
+          </h2>
         </div>
+        <Link
+          to="/archive"
+          data-cursor="EXPLORE"
+          className="font-mono text-[10px] text-blue tracking-[0.1em] uppercase transition-all duration-200"
+          style={{ padding: '9px 18px', border: '1px solid rgba(61,126,255,0.2)', borderRadius: '6px' }}
+          onMouseEnter={e => { e.currentTarget.style.background = 'rgba(61,126,255,0.08)'; e.currentTarget.style.borderColor = 'rgba(61,126,255,0.4)' }}
+          onMouseLeave={e => { e.currentTarget.style.background = 'transparent'; e.currentTarget.style.borderColor = 'rgba(61,126,255,0.2)' }}
+        >
+          View All ↗
+        </Link>
+      </div>
 
-        <div className="grid gap-5" style={{ gridTemplateColumns: 'repeat(auto-fill, minmax(320px, 1fr))' }}>
-          {projects.map((p, i) => <ProjectCard key={i} project={p} i={i} inView={inView} />)}
-        </div>
+      {/* rows */}
+      <div>
+        {featured.map((p, i) => <ProjectRow key={i} project={p} i={i} inView={inView} />)}
+        <div style={{ borderTop: '1px solid rgba(255,255,255,0.05)' }} />
       </div>
     </section>
   )

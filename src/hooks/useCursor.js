@@ -1,42 +1,53 @@
 import { useEffect, useRef } from 'react'
 
 export function useCursor() {
-  const dotRef   = useRef(null)
-  const labelRef = useRef(null)
-  const pos = useRef({ x: -200, y: -200 })
-  const cur = useRef({ x: -200, y: -200 })
-  const raf = useRef(null)
+  const dotRef  = useRef(null)
+  const ringRef = useRef(null)
+  const pos     = useRef({ x: -200, y: -200 })
+  const cur     = useRef({ x: -200, y: -200 })
+  const hovEl   = useRef(null)
 
   useEffect(() => {
-    const dot   = dotRef.current
-    const label = labelRef.current
-    if (!dot || !label) return
+    const dot  = dotRef.current
+    const ring = ringRef.current
+    if (!dot || !ring) return
 
     const onMove = (e) => {
       pos.current = { x: e.clientX, y: e.clientY }
-      const target = e.target.closest('[data-cursor]')
-      const type   = target ? target.dataset.cursor : ''
-      label.textContent = type
-      label.style.opacity = type ? '1' : '0'
-      dot.style.width  = type ? '7px' : '5px'
-      dot.style.height = type ? '7px' : '5px'
+      hovEl.current = e.target.closest('[data-cursor]') || null
     }
 
+    let raf
     const loop = () => {
-      cur.current.x += (pos.current.x - cur.current.x) * 0.11
-      cur.current.y += (pos.current.y - cur.current.y) * 0.11
-      dot.style.transform   = `translate(${cur.current.x - 3}px, ${cur.current.y - 3}px)`
-      label.style.transform = `translate(${cur.current.x + 12}px, ${cur.current.y - 8}px)`
-      raf.current = requestAnimationFrame(loop)
+      cur.current.x += (pos.current.x - cur.current.x) * 0.1
+      cur.current.y += (pos.current.y - cur.current.y) * 0.1
+
+      // dot snaps to mouse
+      dot.style.transform = `translate(${pos.current.x - 3}px, ${pos.current.y - 3}px)`
+      // ring lerps behind
+      ring.style.transform = `translate(${cur.current.x - 18}px, ${cur.current.y - 18}px)`
+
+      if (hovEl.current) {
+        // ring stays same size, just fills — mix-blend on a small circle only inverts a small area
+        ring.style.background = '#e8e8e8'
+        ring.style.border     = 'none'
+        dot.style.opacity     = '0'
+      } else {
+        ring.style.background = 'transparent'
+        ring.style.border     = '1.5px solid rgba(255,255,255,0.5)'
+        dot.style.opacity     = '1'
+      }
+
+      raf = requestAnimationFrame(loop)
     }
 
     window.addEventListener('mousemove', onMove)
-    raf.current = requestAnimationFrame(loop)
+    raf = requestAnimationFrame(loop)
     return () => {
       window.removeEventListener('mousemove', onMove)
-      cancelAnimationFrame(raf.current)
+      cancelAnimationFrame(raf)
     }
   }, [])
 
-  return { dotRef, labelRef }
+  return { dotRef, ringRef }
 }

@@ -1,6 +1,7 @@
 import { useInView } from '../hooks/useInView'
 import { about } from '../data/content'
 import SectionLabel from './SectionLabel'
+import pfp from "../assets/pfp2.jpg";
 
 export default function About() {
   const { ref, inView } = useInView()
@@ -41,7 +42,7 @@ export default function About() {
                 key={i}
                 className="font-display font-black leading-[1.04] tracking-[-0.01em]"
                 style={{
-                  fontSize: 'clamp(30px, 3.8vw, 50px)',
+                  fontSize: 'clamp(20px, 3.8vw, 45px)',
                   color: i === 3 ? 'transparent' : '#dde4ff',
                   fontWeight: i === 3 ? 300 : 800,
                   WebkitTextStroke: i === 3 ? '1px rgba(61,126,255,0.28)' : 'none',
@@ -60,7 +61,7 @@ export default function About() {
             {about.paragraphs.map((p, i) => (
               <p
                 key={i}
-                className="font-body font-light text-mid leading-[1.82]"
+                className="font-body font-light text-gray-400 leading-[1.82]"
                 style={{
                   fontSize: '14px',
                   opacity: inView ? 1 : 0,
@@ -79,26 +80,49 @@ export default function About() {
           style={{ opacity: inView ? 1 : 0, transform: inView ? 'translateY(0)' : 'translateY(32px)', transitionDelay: '0.15s' }}
         >
           {/* Photo placeholder */}
-          <div
-            data-cursor="👋"
-            className="flex-1 min-h-[260px] rounded-xl flex items-center justify-center relative overflow-hidden"
-            style={{ background: 'linear-gradient(135deg, #080a14, #040610)', border: '1px solid rgba(61,126,255,0.1)' }}
-          >
-            {/* crosshair lines */}
-            <div className="absolute inset-0 pointer-events-none">
-              <div className="absolute top-1/2 left-0 right-0 h-px" style={{ background: 'rgba(61,126,255,0.07)' }} />
-              <div className="absolute left-1/2 top-0 bottom-0 w-px" style={{ background: 'rgba(61,126,255,0.07)' }} />
-            </div>
-            {/* corner brackets */}
-            {[['top-3 left-3','border-t border-l'],['top-3 right-3','border-t border-r'],['bottom-3 left-3','border-b border-l'],['bottom-3 right-3','border-b border-r']].map(([pos, bdr], i) => (
-              <span key={i} className={`absolute w-4 h-4 ${pos} ${bdr} border-blue/40`} />
-            ))}
-            {/* bottom fade */}
-            <div className="absolute bottom-0 left-0 right-0 h-[45%] pointer-events-none"
-              style={{ background: 'linear-gradient(to top, #080a14, transparent)' }} />
-            <span className="font-mono text-[9px] text-blue/25 tracking-[0.15em] relative z-10">photo.jpg</span>
+        <div
+          className=" flex items-center justify-center relative overflow-hidden flex-1 min-h-[260px] rounded-xl"
+        >
+          <img
+            src={pfp}
+            alt="profile"
+            data-cursor="This is me"
+            className="absolute inset-0 w-full h-full object-cover"
+          />
+        
+          {/* crosshair lines */}
+          <div className="absolute inset-0 pointer-events-none">
+            <div
+              className="absolute top-1/2 left-0 right-0 h-px"
+              style={{ background: "rgba(61,126,255,0.07)" }}
+            />
+            <div
+              className="absolute left-1/2 top-0 bottom-0 w-px"
+              style={{ background: "rgba(61,126,255,0.07)" }}
+            />
           </div>
-
+        
+          {/* corner brackets */}
+          {[
+            ["top-3 left-3", "border-t border-l"],
+            ["top-3 right-3", "border-t border-r"],
+            ["bottom-3 left-3", "border-b border-l"],
+            ["bottom-3 right-3", "border-b border-r"],
+          ].map(([pos, bdr], i) => (
+            <span key={i} className={`absolute w-4 h-4 ${pos} ${bdr} border-blue/40`} />
+          ))}
+        
+          {/* bottom fade */}
+          <div
+            className="absolute bottom-0 left-0 right-0 h-[45%] pointer-events-none"
+            style={{ background: "linear-gradient(to top, #080a14, transparent)" }}
+          />
+        
+          <span className="font-mono text-[9px] text-blue/25 tracking-[0.15em] relative z-10">
+            photo.jpg
+          </span>
+        </div>
+        
           {/* Stats 2×2 */}
           <div className="grid grid-cols-2 gap-[10px]">
             {about.stats.map((stat, i) => (
@@ -117,7 +141,7 @@ export default function About() {
                 <div className="absolute top-0 right-0 w-[50px] h-[50px] pointer-events-none"
                   style={{ background: 'radial-gradient(circle at 100% 0%, rgba(61,126,255,0.14), transparent 65%)' }} />
                 <div className="font-display font-black text-[28px] text-text leading-none mb-1">{stat.value}</div>
-                <div className="font-mono text-[9px] text-dim tracking-[0.14em] uppercase">{stat.label}</div>
+                <div className="font-mono text-[15px] text-blue tracking-[0.14em] uppercase">{stat.label}</div>
               </div>
             ))}
           </div>

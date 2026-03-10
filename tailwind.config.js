@@ -7,7 +7,7 @@ export default {
         bg:      '#020208',
         surface: '#05060e',
         card:    '#080a14',
-        blue:    '#3d7eff',
+        blue:    '#6eb3ff',
         'blue-b':'#6b9fff',
         cyan:    '#00e5ff',
         green:   '#00ff88',
