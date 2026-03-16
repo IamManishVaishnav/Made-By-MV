@@ -10,10 +10,15 @@ const CAT = {
   'Graphics':    { color: '#6eb3ff', bg: 'rgba(167,139,250,0.05)', border: 'rgba(167,139,250,0.15)', glow: 'rgba(167,139,250,0.05)' },
 }
 
+const TYPE_LABEL = {
+  casestudy: 'Case Study ↗',
+  external:  'Live Project ↗',
+  archive:   'View All ↗',
+}
+
 function ProjectRow({ project, i, inView }) {
   const [hovered, setHovered] = useState(false)
   const cat = CAT[project.category] || CAT['UI/UX']
-  const isExternal = project.link.startsWith('http')
 
   const inner = (
     <div
@@ -37,7 +42,6 @@ function ProjectRow({ project, i, inView }) {
         }}
       />
 
-      {/* main row */}
       <div className="relative z-10 flex items-center gap-8">
 
         {/* index */}
@@ -45,7 +49,7 @@ function ProjectRow({ project, i, inView }) {
           className="font-mono flex-shrink-0 transition-all duration-300"
           style={{
             fontSize:   '11px',
-            color: hovered ? cat.color : "blue",
+            color:      hovered ? cat.color : 'rgba(255,255,255,0.28)',
             width:      '26px',
             fontWeight: hovered ? 900 : 500,
           }}
@@ -53,21 +57,18 @@ function ProjectRow({ project, i, inView }) {
           {project.index}
         </span>
 
-        {/* title + tags block */}
+        {/* title + tags */}
         <div className="flex-1 min-w-0">
-          {/* title */}
           <span
-            className="font-display font-black text-white leading-none tracking-[-0.02em] block"
+            className="font-display font-black leading-none tracking-[-0.02em] block"
             style={{
-              color: hovered ? cat.color : "white",
-              fontSize: hovered ? 'clamp(26px,3.5vw,70px)' : 'clamp(20px,2.6vw,50px)',
-              transition: 'font-size 0.35s cubic-bezier(0.22,1,0.36,1)',
+              color:      hovered ? cat.color : 'white',
+              fontSize:   hovered ? 'clamp(26px,3.5vw,70px)' : 'clamp(20px,2.6vw,50px)',
+              transition: 'font-size 0.35s cubic-bezier(0.22,1,0.36,1), color 0.3s ease',
             }}
           >
             {project.title}
           </span>
-
-          {/* tags — always visible below title */}
           <div className="flex flex-wrap gap-[6px] mt-[8px]">
             {project.tags.map((tag, j) => (
               <span
@@ -86,25 +87,24 @@ function ProjectRow({ project, i, inView }) {
           </div>
         </div>
 
-        {/* image overlay — center of row, fades in on hover */}
+        {/* image overlay */}
         <div
           className="absolute pointer-events-none"
           style={{
-            left:       '45%',
-            top:        '50%',
-            transform: hovered ? 'translate(-50%, -50%) scale(1) rotate(-4deg)' : 'translate(-50%, -50%) scale(0.92) rotate(-4deg)',
-            width:  '420px',
-            height: '220px',
-            opacity:    hovered ? 1 : 0,
-            transition: 'opacity 0.35s ease, transform 0.4s cubic-bezier(0.22,1,0.36,1)',
+            left:         '45%',
+            top:          '50%',
+            transform:    hovered ? 'translate(-50%, -50%) scale(1) rotate(-4deg)' : 'translate(-50%, -50%) scale(0.92) rotate(-4deg)',
+            width:        '420px',
+            height:       '220px',
+            opacity:      hovered ? 1 : 0,
+            transition:   'opacity 0.35s ease, transform 0.4s cubic-bezier(0.22,1,0.36,1)',
             borderRadius: '8px',
-            overflow:   'hidden',
-            border:     `3px solid ${cat.border}`,
-            boxShadow: `0 16px 80px rgba(0,0,0,0.8), 0 0 50px ${cat.glow}, 0 0 100px ${cat.glow}`,
-            zIndex:     20,
+            overflow:     'hidden',
+            border:       `3px solid ${cat.border}`,
+            boxShadow:    `0 16px 80px rgba(0,0,0,0.8), 0 0 50px ${cat.glow}, 0 0 100px ${cat.glow}`,
+            zIndex:       20,
           }}
         >
-          {/* grid texture bg */}
           <div className="absolute inset-0" style={{ background: 'linear-gradient(135deg, #080c1a, #060810)' }} />
           <div className="absolute inset-0" style={{ backgroundImage: 'linear-gradient(rgba(61,126,255,0.06) 1px, transparent 1px), linear-gradient(90deg, rgba(61,126,255,0.06) 1px, transparent 1px)', backgroundSize: '18px 18px' }} />
           <div className="absolute inset-0" style={{ background: `radial-gradient(ellipse at 50% 50%, ${cat.glow}, transparent 60%)` }} />
@@ -113,11 +113,25 @@ function ProjectRow({ project, i, inView }) {
           </div>
         </div>
 
-        {/* right side — category + year + view button */}
+        {/* right — year + type badge + cta */}
         <div className="flex items-center gap-4 flex-shrink-0">
-          <span className="font-mono text-[10px] text-dim hidden md:block">{project.year}</span>
 
-          {/* View Project button — appears on hover */}
+          {/* type badge — always visible */}
+          <span
+            className="font-mono text-[8px] tracking-[0.1em] uppercase rounded-[4px] hidden md:block transition-all duration-300"
+            style={{
+              padding:    '3px 8px',
+              background: hovered ? cat.bg    : 'transparent',
+              border:     `1px solid ${hovered ? cat.border : 'rgba(255,255,255,0.06)'}`,
+              color:      hovered ? cat.color : '#1e2440',
+            }}
+          >
+            {project.type === 'casestudy' ? 'Case Study' : project.type === 'external' ? 'Live' : 'Gallery'}
+          </span>
+
+          <span className="font-mono text-[10px] hidden md:block" style={{ color: '#8892b0' }}>{project.year}</span>
+
+          {/* CTA on hover */}
           <div
             style={{
               opacity:    hovered ? 1 : 0,
@@ -130,22 +144,20 @@ function ProjectRow({ project, i, inView }) {
               style={{
                 padding:    '7px 14px',
                 background: cat.color,
-                border:     `1px solid ${cat.border}`,
                 color:      '#020208',
+                whiteSpace: 'nowrap',
               }}
             >
-              View Project
-              <span style={{ fontSize: '11px' }}>↗</span>
+              {TYPE_LABEL[project.type]}
             </span>
           </div>
 
-          {/* arrow — default state */}
+          {/* arrow default */}
           <span
             className="font-mono text-[20px] flex-shrink-0 transition-all duration-300"
             style={{
-              color:      hovered ? 'transparent' : '#8892b0',
-              transform:  hovered ? 'translate(3px,-3px)' : 'translate(0,0)',
-              position:   'relative',
+              color:     hovered ? 'transparent' : '#8892b0',
+              transform: hovered ? 'translate(3px,-3px)' : 'translate(0,0)',
             }}
           >
             ↗
@@ -162,16 +174,27 @@ function ProjectRow({ project, i, inView }) {
     style: { display: 'block', textDecoration: 'none' },
   }
 
+  // route based on type
+  if (project.type === 'external') {
+    return (
+      <div style={{ opacity: inView ? 1 : 0, transform: inView ? 'translateY(0)' : 'translateY(18px)', transition: `opacity 0.55s ease ${i * 0.07}s, transform 0.55s ease ${i * 0.07}s` }}>
+        <a href={project.link} target="_blank" rel="noopener noreferrer" {...sharedProps}>{inner}</a>
+      </div>
+    )
+  }
+
+  if (project.type === 'archive') {
+    return (
+      <div style={{ opacity: inView ? 1 : 0, transform: inView ? 'translateY(0)' : 'translateY(18px)', transition: `opacity 0.55s ease ${i * 0.07}s, transform 0.55s ease ${i * 0.07}s` }}>
+        <Link to="/archive" {...sharedProps}>{inner}</Link>
+      </div>
+    )
+  }
+
+  // casestudy
   return (
-    <div style={{
-      opacity:    inView ? 1 : 0,
-      transform:  inView ? 'translateY(0)' : 'translateY(18px)',
-      transition: `opacity 0.55s ease ${i * 0.07}s, transform 0.55s ease ${i * 0.07}s`,
-    }}>
-      {isExternal
-        ? <a href={project.link} target="_blank" rel="noopener noreferrer" {...sharedProps}>{inner}</a>
-        : <Link to={project.link} {...sharedProps}>{inner}</Link>
-      }
+    <div style={{ opacity: inView ? 1 : 0, transform: inView ? 'translateY(0)' : 'translateY(18px)', transition: `opacity 0.55s ease ${i * 0.07}s, transform 0.55s ease ${i * 0.07}s` }}>
+      <Link to={project.link} {...sharedProps}>{inner}</Link>
     </div>
   )
 }
@@ -185,7 +208,6 @@ export default function Projects() {
       <div className="absolute top-0 left-0 right-0 h-px pointer-events-none"
         style={{ background: 'linear-gradient(90deg, transparent, rgba(61,126,255,0.18), rgba(0,229,255,0.1), transparent)' }} />
 
-      {/* header */}
       <div
         className="flex items-end justify-between mb-10 flex-wrap gap-4"
         style={{ padding: '0 clamp(20px,5vw,64px)', opacity: inView ? 1 : 0, transition: 'opacity 0.6s ease' }}
@@ -208,7 +230,6 @@ export default function Projects() {
         </Link>
       </div>
 
-      {/* rows */}
       <div>
         {featured.map((p, i) => <ProjectRow key={i} project={p} i={i} inView={inView} />)}
         <div style={{ borderTop: '1px solid rgba(255,255,255,0.05)' }} />

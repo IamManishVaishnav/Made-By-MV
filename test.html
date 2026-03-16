@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Hero</title>
+<style>
+  *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body { overflow: hidden; height: 100vh; background: #0a0a0a; cursor: none; }
+
+  .hero {
+    position: relative;
+    width: 100vw;
+    height: 100vh;
+    overflow: hidden;
+  }
+
+  /* Both images sit full screen, clipped by JS-driven clip-path */
+  .img-panel {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+  }
+
+  .img-panel img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    object-position: center top;
+    display: block;
+    user-select: none;
+    pointer-events: none;
+  }
+
+  /* Left image — clipped to left of split */
+  .img-left {
+    clip-path: inset(0 50% 0 0);
+    transition: clip-path 0.05s linear;
+  }
+
+  /* Right image — clipped to right of split */
+  .img-right {
+    clip-path: inset(0 0 0 50%);
+    transition: clip-path 0.05s linear;
+  }
+
+  /* Divider line */
+  .divider {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 50%;
+    width: 2px;
+    background: #fff;
+    transform: translateX(-50%);
+    z-index: 10;
+    mix-blend-mode: difference;
+    pointer-events: none;
+    transition: left 0.05s linear;
+  }
+
+  /* Labels */
+  .label {
+    position: absolute;
+    bottom: 48px;
+    font-family: 'Helvetica Neue', Helvetica, sans-serif;
+    font-size: 11px;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.7);
+    z-index: 20;
+    pointer-events: none;
+    mix-blend-mode: difference;
+  }
+
+  .label-left  { left: 48px; }
+  .label-right { right: 48px; }
+
+  /* Custom cursor */
+  .cursor {
+    position: fixed;
+    width: 40px;
+    height: 40px;
+    border: 1px solid rgba(255,255,255,0.8);
+    border-radius: 50%;
+    pointer-events: none;
+    z-index: 100;
+    transform: translate(-50%, -50%);
+    mix-blend-mode: difference;
+    transition: transform 0.1s ease, width 0.2s ease, height 0.2s ease;
+  }
+
+  .cursor-dot {
+    position: fixed;
+    width: 4px;
+    height: 4px;
+    background: white;
+    border-radius: 50%;
+    pointer-events: none;
+    z-index: 101;
+    transform: translate(-50%, -50%);
+    mix-blend-mode: difference;
+  }
+</style>
+</head>
+<body>
+
+<div class="hero">
+
+  <!-- LEFT IMAGE — designer vibe -->
+  <div class="img-panel img-left">
+    <img src="src/assets/left.png" alt="Designer" />
+  </div>
+
+  <!-- RIGHT IMAGE — developer vibe -->
+  <div class="img-panel img-right">
+    <img src="src/assets/right.png" alt="Developer" />
+  </div>
+
+  <!-- SPLIT LINE -->
+  <div class="divider" id="divider"></div>
+
+  <!-- LABELS -->
+  <span class="label label-left">Designer</span>
+  <span class="label label-right">Developer</span>
+
+</div>
+
+<!-- Custom cursor -->
+<div class="cursor" id="cursor"></div>
+<div class="cursor-dot" id="cursorDot"></div>
+
+<script>
+  const leftPanel  = document.querySelector('.img-left');
+  const rightPanel = document.querySelector('.img-right');
+  const divider    = document.getElementById('divider');
+  const cursor     = document.getElementById('cursor');
+  const cursorDot  = document.getElementById('cursorDot');
+
+  let target = 50;   // target split % 
+  let current = 50;  // current lerped split %
+  let mouseX = 0;
+  let mouseY = 0;
+  let curX = 0;
+  let curY = 0;
+
+  document.addEventListener('mousemove', (e) => {
+    mouseX = e.clientX;
+    mouseY = e.clientY;
+    target = 100 - (e.clientX / window.innerWidth) * 100;
+  });
+
+  function lerp(a, b, t) { return a + (b - a) * t; }
+
+  function tick() {
+    // Lerp split
+    current = lerp(current, target, 0.06);
+
+    const pct = current.toFixed(3);
+
+    leftPanel.style.clipPath  = `inset(0 ${(100 - current).toFixed(3)}% 0 0)`;
+    rightPanel.style.clipPath = `inset(0 0 0 ${pct}%)`;
+    divider.style.left        = `${pct}%`;
+
+    // Lerp cursor
+    curX = lerp(curX, mouseX, 0.12);
+    curY = lerp(curY, mouseY, 0.12);
+    cursor.style.left = curX + 'px';
+    cursor.style.top  = curY + 'px';
+    cursorDot.style.left = mouseX + 'px';
+    cursorDot.style.top  = mouseY + 'px';
+
+    requestAnimationFrame(tick);
+  }
+
+  tick();
+</script>
+
+</body>
+</html>

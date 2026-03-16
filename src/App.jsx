@@ -5,6 +5,8 @@ import Loader from './components/Loader'
 import Home from './pages/Home'
 import Archive from './pages/Archive'
 import Quotes from './pages/Quotes'
+import Navbar from './components/Navbar'
+import Vynox from './pages/work/Vynox'
 
 export default function App() {
   const alreadyLoaded = sessionStorage.getItem('mv_loaded') === '1'
@@ -24,10 +26,12 @@ export default function App() {
         transition: loaded ? 'opacity 0.5s ease' : 'none',
         visibility: loaded ? 'visible' : 'hidden'
       }}>
+        <Navbar />
         <Routes>
           <Route path="/"        element={<Home />} />
           <Route path="/archive" element={<Archive />} />
           <Route path="/quotes"  element={<Quotes />} />
+          <Route path="/work/vynox" element={<Vynox />} />
         </Routes>
       </div>
     </BrowserRouter>

@@ -2,57 +2,124 @@ import { useInView } from '../hooks/useInView'
 import { skills } from '../data/content'
 import SectionLabel from './SectionLabel'
 
-const ACCENTS = {
-  blue: { color: '#3d7eff', glow: 'rgba(61,126,255,0.12)', tagBg: 'rgba(61,126,255,0.06)', tagBorder: 'rgba(61,126,255,0.15)', tagHoverBg: 'rgba(61,126,255,0.15)', tagHoverBorder: 'rgba(61,126,255,0.45)', panelBorder: 'rgba(61,126,255,0.35)', divider: 'rgba(61,126,255,0.35)' },
-  cyan: { color: '#00e5ff', glow: 'rgba(0,229,255,0.08)',  tagBg: 'rgba(0,229,255,0.04)',  tagBorder: 'rgba(0,229,255,0.12)', tagHoverBg: 'rgba(0,229,255,0.12)', tagHoverBorder: 'rgba(0,229,255,0.4)',  panelBorder: 'rgba(0,229,255,0.3)',  divider: 'rgba(0,229,255,0.25)' },
+
+const DEVICONS = {
+  'Figma':             'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/figma/figma-original.svg',
+  'Adobe Suite':       'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/photoshop/photoshop-plain.svg',
+  'React.js':          'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/react/react-original.svg',
+  'Next.js':           'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/nextjs/nextjs-original.svg',
+  'TypeScript':        'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/typescript/typescript-original.svg',
+  'JavaScript':        'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/javascript/javascript-original.svg',
+  'Tailwind CSS':      'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/tailwindcss/tailwindcss-original.svg',
+  'Node.js':           'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/nodejs/nodejs-original.svg',
+  'Express.js':        'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/express/express-original.svg',
+  'SQL':               'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/mysql/mysql-original.svg',
+  'Claude':     '/icons/claude.png',
+  'Midjourney': '/icons/midjourney.png',
+  'v0':         '/icons/v0.png',
+  'Cursor AI':  '/icons/cursor.png',
 }
 
-function Panel({ data, inView, delay }) {
-  const a = ACCENTS[data.accent]
+const WHITE_ICONS = new Set(['Express.js', 'Adobe Suite', 'Next.js'])
+
+const FALLBACK = {
+  'User Research':     '🔍',
+  'Wireframing':       '✏️',
+  'Prototyping':       '⚡',
+  'Design Systems':    '◈',
+  'Usability Testing': '◎',
+  'Accessibility':     '◇',
+}
+
+function Tile({ name, accent, delay, inView }) {
+  const isBlue  = accent === 'blue'
+  const isAmber = accent === 'amber'
+
+  const color     = isBlue ? '#5a9fff' : isAmber ? '#f59e0b' : '#00e5ff'
+  const nameColor = isBlue ? '#a8c8ff' : isAmber ? '#fcd34d' : '#7fe8f5'
+  const bg        = isBlue ? 'rgba(90,159,255,0.06)'  : isAmber ? 'rgba(245,158,11,0.06)'  : 'rgba(0,229,255,0.04)'
+  const border    = isBlue ? 'rgba(90,159,255,0.12)'  : isAmber ? 'rgba(245,158,11,0.12)'  : 'rgba(0,229,255,0.1)'
+  const hBg       = isBlue ? 'rgba(90,159,255,0.15)'  : isAmber ? 'rgba(245,158,11,0.15)'  : 'rgba(0,229,255,0.12)'
+  const hBorder   = isBlue ? 'rgba(90,159,255,0.4)'   : isAmber ? 'rgba(245,158,11,0.4)'   : 'rgba(0,229,255,0.35)'
+
+  const icon     = DEVICONS[name]
+  const fallback = FALLBACK[name]
+  const white    = WHITE_ICONS.has(name)
+
   return (
     <div
-      className="flex-1 relative overflow-hidden rounded-[14px] p-9 bg-card transition-all duration-300"
+      data-cursor="SKILL"
+      className="flex flex-col items-center gap-[10px] rounded-[14px] transition-all duration-200 flex-shrink-0"
       style={{
-        border: '1px solid rgba(255,255,255,0.05)',
-        opacity: inView ? 1 : 0,
-        transform: inView ? 'translateY(0)' : 'translateY(32px)',
-        transition: `opacity 0.7s ease ${delay}s, transform 0.7s ease ${delay}s, border-color 0.3s`,
+        padding:    '16px 12px',
+        background: bg,
+        border:     `1px solid ${border}`,
+        width:      '88px',
+        opacity:    inView ? 1 : 0,
+        transform:  inView ? 'translateY(0) scale(1)' : 'translateY(16px) scale(0.9)',
+        transition: `opacity 0.4s ease ${delay}s, transform 0.4s cubic-bezier(0.22,1,0.36,1) ${delay}s, background 0.2s, border-color 0.2s, box-shadow 0.2s`,
       }}
-      onMouseEnter={e => e.currentTarget.style.borderColor = a.panelBorder}
-      onMouseLeave={e => e.currentTarget.style.borderColor = 'rgba(255,255,255,0.05)'}
+      onMouseEnter={e => {
+        e.currentTarget.style.background  = hBg
+        e.currentTarget.style.borderColor = hBorder
+        e.currentTarget.style.transform   = 'translateY(-4px) scale(1.04)'
+        e.currentTarget.style.boxShadow   = '0 8px 24px rgba(0,0,0,0.4)'
+      }}
+      onMouseLeave={e => {
+        e.currentTarget.style.background  = bg
+        e.currentTarget.style.borderColor = border
+        e.currentTarget.style.transform   = 'translateY(0) scale(1)'
+        e.currentTarget.style.boxShadow   = 'none'
+      }}
     >
-      {/* corner radial glow */}
-      <div className="absolute top-0 left-0 w-[220px] h-[220px] pointer-events-none"
-        style={{ background: `radial-gradient(circle at 0% 0%, ${a.glow}, transparent 65%)` }} />
+      <div
+        className="rounded-[10px] flex items-center justify-center"
+        style={{ width: '48px', height: '48px', background: 'rgba(255,255,255,0.03)' }}
+      >
+        {icon
+          ? <img src={icon} alt={name} style={{ width: '32px', height: '32px', filter: white ? 'brightness(0) invert(1)' : 'none' }} />
+          : <span style={{ fontSize: '26px', lineHeight: 1, color }}>{fallback || '◆'}</span>
+        }
+      </div>
+      <span style={{ fontSize: '10px', color: nameColor, textAlign: 'center', fontFamily: 'Manrope, sans-serif', lineHeight: 1.3 }}>
+        {name}
+      </span>
+    </div>
+  )
+}
 
-      <span className="font-mono text-[9px] tracking-[0.2em] uppercase block mb-[6px]" style={{ color: a.color }}>{data.tag}</span>
-      <div className="font-display font-black leading-[0.9] tracking-[-0.025em] text-text mb-6"
-        style={{ fontSize: 'clamp(34px, 4.5vw, 52px)' }}>
-        {data.label}
+function Row({ data, inView, baseDelay }) {
+  const isBlue  = data.accent === 'blue'
+  const isAmber = data.accent === 'amber'
+  const color     = isBlue ? '#5a9fff' : isAmber ? '#f59e0b' : '#00e5ff'
+  const gradColor = isBlue ? 'rgba(90,159,255,0.2)' : isAmber ? 'rgba(245,158,11,0.2)' : 'rgba(0,229,255,0.15)'
+
+  return (
+    <div>
+      {/* row label */}
+      <div className="flex items-center gap-3 mb-4 px-1">
+        <span
+          className="font-mono text-[9px] tracking-[0.2em] uppercase flex-shrink-0"
+          style={{ color }}
+        >
+          {data.label}
+        </span>
+        <div className="flex-1 h-px" style={{ background: `linear-gradient(90deg, ${gradColor}, transparent)` }} />
       </div>
 
-      {/* divider */}
-      <div className="h-px mb-[22px]" style={{ background: `linear-gradient(90deg, ${a.divider}, transparent)` }} />
-
-      {/* tags */}
-      <div className="flex flex-wrap gap-2">
+      {/* tiles — centered, wraps on mobile */}
+      <div
+        className="flex flex-wrap justify-center gap-[8px]"
+        style={{ WebkitOverflowScrolling: 'touch' }}
+      >
         {data.items.map((name, i) => (
-          <div
+          <Tile
             key={i}
-            data-cursor="SKILL"
-            className="font-body text-[12px] text-text rounded-[5px] transition-all duration-200"
-            style={{
-              padding: '7px 13px',
-              background: a.tagBg,
-              border: `1px solid ${a.tagBorder}`,
-              opacity: inView ? 1 : 0,
-              animation: inView ? `fadeIn 0.4s ease ${delay + 0.04 * i}s both` : 'none',
-            }}
-            onMouseEnter={e => { e.currentTarget.style.background = a.tagHoverBg; e.currentTarget.style.borderColor = a.tagHoverBorder; e.currentTarget.style.transform = 'translateY(-2px)'; e.currentTarget.style.boxShadow = `0 4px 16px ${a.glow}` }}
-            onMouseLeave={e => { e.currentTarget.style.background = a.tagBg; e.currentTarget.style.borderColor = a.tagBorder; e.currentTarget.style.transform = 'translateY(0)'; e.currentTarget.style.boxShadow = 'none' }}
-          >
-            {name}
-          </div>
+            name={name}
+            accent={data.accent}
+            inView={inView}
+            delay={baseDelay + i * 0.05}
+          />
         ))}
       </div>
     </div>
@@ -60,36 +127,70 @@ function Panel({ data, inView, delay }) {
 }
 
 export default function Skills() {
-  const { ref, inView } = useInView()
+  const { ref, inView } = useInView(0.15)
 
   return (
     <section
       id="skills"
       ref={ref}
       className="relative bg-bg"
-      style={{ padding: 'clamp(80px,12vw,130px) clamp(20px,5vw,64px)' }}
+      style={{ padding: 'clamp(60px,8vw,100px) clamp(20px,5vw,64px)' }}
     >
-      {/* top + bottom border lines */}
-      {['top-0','bottom-0'].map(pos => (
-        <div key={pos} className={`absolute ${pos} left-0 right-0 h-px pointer-events-none`}
-          style={{ background: 'linear-gradient(90deg, transparent, rgba(61,126,255,0.18), rgba(0,229,255,0.1), transparent)' }} />
-      ))}
+      {/* top border */}
+      <div
+        className="absolute top-0 left-0 right-0 h-px pointer-events-none"
+        style={{ background: 'linear-gradient(90deg, transparent, rgba(90,159,255,0.18), rgba(0,229,255,0.1), transparent)' }}
+      />
 
-      <div className="max-w-[1200px] mx-auto">
-        <div className="flex items-end justify-between mb-12" style={{ opacity: inView ? 1 : 0, transition: 'opacity 0.6s ease' }}>
-          <div>
+      <div className="max-w-[1000px] mx-auto">
+
+        {/* header */}
+        <div
+          className="text-center mb-10 transition-all duration-700"
+          style={{
+            opacity:   inView ? 1 : 0,
+            transform: inView ? 'translateY(0)' : 'translateY(20px)',
+          }}
+        >
+          <div className="flex justify-center mb-3">
             <SectionLabel>Skills & Tools</SectionLabel>
-            <h2 className="font-display font-black text-text tracking-[-0.01em] leading-none" style={{ fontSize: 'clamp(28px,4vw,44px)' }}>
-              What I work with
-            </h2>
+          </div>
+          <h2
+            className="font-display font-black text-text leading-none tracking-[-0.02em]"
+            style={{ fontSize: 'clamp(28px,4vw,44px)' }}
+          >
+            What I work with
+          </h2>
+        </div>
+
+        {/* tray */}
+        <div
+          className="rounded-[20px] transition-all duration-700"
+          style={{
+            background: 'rgba(6,7,18,0.9)',
+            border:     '1px solid rgba(255,255,255,0.07)',
+            padding:    'clamp(20px,3vw,36px)',
+            boxShadow:  '0 24px 80px rgba(0,0,0,0.4), inset 0 1px 0 rgba(255,255,255,0.04)',
+            opacity:    inView ? 1 : 0,
+            transform:  inView ? 'translateY(0)' : 'translateY(24px)',
+            transition: 'opacity 0.6s ease 0.1s, transform 0.6s cubic-bezier(0.22,1,0.36,1) 0.1s',
+          }}
+        >
+          <div className="flex flex-col gap-6">
+            <Row data={skills.design} inView={inView} baseDelay={0.2} />
+            <div style={{ height: '1px', background: 'rgba(255,255,255,0.05)' }} />
+            <Row data={skills.dev}    inView={inView} baseDelay={0.5} />
+            <div style={{ height: '1px', background: 'rgba(255,255,255,0.05)' }} />
+            <Row data={skills.ai}     inView={inView} baseDelay={0.8} />
           </div>
         </div>
-
-        <div className="flex gap-5 items-stretch">
-          <Panel data={skills.design} inView={inView} delay={0.1} />
-          <Panel data={skills.dev}    inView={inView} delay={0.25} />
-        </div>
       </div>
+
+      {/* bottom border */}
+      <div
+        className="absolute bottom-0 left-0 right-0 h-px pointer-events-none"
+        style={{ background: 'linear-gradient(90deg, transparent, rgba(90,159,255,0.18), rgba(0,229,255,0.1), transparent)' }}
+      />
     </section>
   )
 }

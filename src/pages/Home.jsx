@@ -11,12 +11,11 @@ import Footer from '../components/Footer'
 export default function Home() {
   return (
     <>
-      <Navbar />
       <Hero />
+      <Projects />
       <About />
       <Skills />
       <Experience />
-      <Projects />
       <Community />
       <TheShelf />
       <Footer />

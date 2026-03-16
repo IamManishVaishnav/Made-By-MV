@@ -1,7 +1,7 @@
 import { useCursor } from '../hooks/useCursor'
 
 export default function Cursor() {
-  const { dotRef, ringRef } = useCursor()
+  const { dotRef, ringRef, labelRef } = useCursor()
 
   const base = {
     position:      'fixed',
@@ -14,7 +14,6 @@ export default function Cursor() {
 
   return (
     <>
-      {/* small dot — snaps instantly */}
       <div
         ref={dotRef}
         style={{
@@ -26,7 +25,6 @@ export default function Cursor() {
           mixBlendMode: 'difference',
         }}
       />
-      {/* ring — lerps, fills + inverts on hover */}
       <div
         ref={ringRef}
         style={{
@@ -35,8 +33,22 @@ export default function Cursor() {
           height:       '36px',
           borderRadius: '50%',
           border:       '1.5px solid rgba(255,255,255,0.5)',
-          mixBlendMode: "color-dodge" ,
-          transition:   'width 0.2s cubic-bezier(0.22,1,0.36,1), height 0.2s cubic-bezier(0.22,1,0.36,1), border-radius 0.2s cubic-bezier(0.22,1,0.36,1), background 0.15s ease, border 0.15s ease',
+          mixBlendMode: 'exclusion',
+          transition:   'background 0.15s ease, border 0.15s ease',
+        }}
+      />
+      <div
+        ref={labelRef}
+        style={{
+          ...base,
+          fontFamily:    '"Geist Mono", monospace',
+          fontSize:      '9px',
+          letterSpacing: '0.18em',
+          color:         '#5a9fff',
+          textTransform: 'uppercase',
+          opacity:       0,
+          transition:    'opacity 0.15s ease',
+          whiteSpace:    'nowrap',
         }}
       />
     </>
