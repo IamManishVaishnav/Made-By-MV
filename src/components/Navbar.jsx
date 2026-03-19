@@ -128,7 +128,7 @@ export default function Navbar() {
               padding:        '9px 18px',
               background:     '#5a9fff',
               borderRadius:   '7px',
-              color:          '#020208',
+              color:          '#ffffff',
               boxShadow:      '0 0 20px rgba(90,159,255,0.4)',
               textDecoration: 'none',
             }}

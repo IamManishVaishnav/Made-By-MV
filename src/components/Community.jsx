@@ -3,7 +3,12 @@ import { useInView } from '../hooks/useInView'
 import { community } from '../data/content'
 import SectionLabel from './SectionLabel'
 
-const PHOTO_TINTS = ['#0a1830', '#0a1a14', '#141a0a', '#1a0a1a']
+import photo1 from '../assets/WIT Conf Jaipur 2024.jpg'
+import photo2 from '../assets/AWS Community Day Rajasthan 2024.jpg'
+import photo3 from '../assets/API Day Jaipur 2023.jpg'
+import photo4 from '../assets/AWS Community Day Rajasthan 2023.jpg'
+
+const PHOTOS = [photo1, photo2, photo3, photo4]
 
 export default function Community() {
   const { ref, inView } = useInView()
@@ -19,22 +24,30 @@ export default function Community() {
       id="community"
       ref={ref}
       className="relative overflow-hidden bg-surface"
-      style={{ padding: 'clamp(80px,12vw,130px) clamp(20px,5vw,64px)' }}
+      style={{ padding: 'clamp(60px,10vw,130px) clamp(16px,5vw,64px)' }}
     >
-      {/* bottom-left glow */}
       <div className="absolute bottom-0 left-0 w-[500px] h-[400px] pointer-events-none"
-        style={{ background: 'radial-gradient(circle at 0% 100%, rgba(61,126,255,0.05), transparent 60%)' }} />
+        style={{ background: 'radial-gradient(circle at 0% 100%, rgba(90,159,255,0.05), transparent 60%)' }} />
 
       <div className="max-w-[1200px] mx-auto relative z-10">
-        <div style={{ opacity: inView ? 1 : 0, transition: 'opacity 0.6s ease', marginBottom: '48px' }}>
+
+        {/* header */}
+        <div
+          className="mb-12 transition-all duration-700"
+          style={{ opacity: inView ? 1 : 0, transform: inView ? 'translateY(0)' : 'translateY(20px)' }}
+        >
           <SectionLabel>Community</SectionLabel>
-          <h2 className="font-display font-black text-text tracking-[-0.01em] leading-none" style={{ fontSize: 'clamp(28px,4vw,44px)' }}>
+          <h2 className="font-display font-black text-text tracking-[-0.01em] leading-none" style={{ fontSize: 'clamp(24px,4vw,44px)' }}>
             Beyond the screen
           </h2>
         </div>
 
-        <div className="grid gap-6" style={{ gridTemplateColumns: '1fr 1fr', alignItems: 'stretch' }}>
-          {/* LEFT */}
+        {/* main grid — stacks on mobile */}
+        <div
+          className="grid gap-6"
+          style={{ gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 340px), 1fr))', alignItems: 'stretch' }}
+        >
+          {/* LEFT — awards + events */}
           <div
             className="flex flex-col gap-4 transition-all duration-700"
             style={{ opacity: inView ? 1 : 0, transform: inView ? 'translateY(0)' : 'translateY(24px)' }}
@@ -47,42 +60,42 @@ export default function Community() {
                   <div
                     key={i}
                     className="flex items-center gap-[14px] rounded-[10px] bg-card transition-all duration-200"
-                    style={{ padding: '14px 18px', border: '1px solid rgba(61,126,255,0.12)' }}
-                    onMouseEnter={e => e.currentTarget.style.borderColor = 'rgba(61,126,255,0.35)'}
-                    onMouseLeave={e => e.currentTarget.style.borderColor = 'rgba(61,126,255,0.12)'}
+                    style={{ padding: 'clamp(12px,2vw,14px) clamp(14px,2vw,18px)', border: '1px solid rgba(90,159,255,0.12)' }}
+                    onMouseEnter={e => e.currentTarget.style.borderColor = 'rgba(90,159,255,0.35)'}
+                    onMouseLeave={e => e.currentTarget.style.borderColor = 'rgba(90,159,255,0.12)'}
                   >
                     <div className="w-8 h-8 rounded-[8px] flex items-center justify-center text-base flex-shrink-0"
-                      style={{ background: 'rgba(61,126,255,0.1)', border: '1px solid rgba(61,126,255,0.2)' }}>🏆</div>
+                      style={{ background: 'rgba(90,159,255,0.1)', border: '1px solid rgba(90,159,255,0.2)' }}>🏆</div>
                     <div>
-                      <div className="font-body text-[13px] font-semibold text-text">{a.title}</div>
-                      <div className="font-mono text-[9px] text-dim tracking-[0.06em]">{a.org} · {a.year}</div>
+                      <div className="font-body font-semibold text-text" style={{ fontSize: 'clamp(12px,1.5vw,13px)' }}>{a.title}</div>
+                      <div className="font-mono text-dim tracking-[0.06em]" style={{ fontSize: '9px' }}>{a.org} · {a.year}</div>
                     </div>
                   </div>
                 ))}
               </div>
             </div>
 
-            {/* Events scrollable */}
+            {/* Events */}
             <div className="flex flex-col flex-1">
               <p className="font-mono text-[9px] text-dim tracking-[0.18em] uppercase mb-3">Events & Roles</p>
-              <div className="flex-1 rounded-[10px] bg-card overflow-y-auto" style={{ border: '1px solid rgba(255,255,255,0.05)', scrollbarWidth: 'none' }}>
+              <div className="flex-1 rounded-[10px] bg-card overflow-y-auto" style={{ border: '1px solid rgba(255,255,255,0.05)', scrollbarWidth: 'none', maxHeight: '260px' }}>
                 {community.events.map((ev, i) => (
                   <div
                     key={i}
                     className="flex items-center gap-3 transition-colors duration-150"
-                    style={{ padding: '10px 16px', borderBottom: i < community.events.length - 1 ? '1px solid rgba(255,255,255,0.04)' : 'none' }}
-                    onMouseEnter={e => e.currentTarget.style.background = 'rgba(61,126,255,0.04)'}
+                    style={{ padding: 'clamp(8px,1.5vw,10px) clamp(12px,2vw,16px)', borderBottom: i < community.events.length - 1 ? '1px solid rgba(255,255,255,0.04)' : 'none' }}
+                    onMouseEnter={e => e.currentTarget.style.background = 'rgba(90,159,255,0.04)'}
                     onMouseLeave={e => e.currentTarget.style.background = 'transparent'}
                   >
-                    <span className="text-blue/40 text-[8px]">◈</span>
-                    <span className="font-body text-[12px] text-mid">{ev}</span>
+                    <span style={{ color: 'rgba(90,159,255,0.4)', fontSize: '8px' }}>◈</span>
+                    <span className="font-body text-mid" style={{ fontSize: 'clamp(11px,1.4vw,12px)' }}>{ev}</span>
                   </div>
                 ))}
               </div>
             </div>
           </div>
 
-          {/* RIGHT — bento grid */}
+          {/* RIGHT — photo bento grid */}
           <div
             className="grid grid-cols-2 gap-3 transition-all duration-700"
             style={{ opacity: inView ? 1 : 0, transform: inView ? 'translateY(0)' : 'translateY(24px)', transitionDelay: '0.2s' }}
@@ -93,24 +106,28 @@ export default function Community() {
                 className="relative rounded-[10px] overflow-hidden"
                 style={{
                   aspectRatio: '1',
-                  background: PHOTO_TINTS[i],
-                  border: `1px solid ${active === i ? 'rgba(61,126,255,0.45)' : 'rgba(255,255,255,0.05)'}`,
-                  boxShadow: active === i ? '0 0 20px rgba(61,126,255,0.12)' : 'none',
-                  transition: 'border-color 0.5s, box-shadow 0.5s',
+                  border:     `1px solid ${active === i ? 'rgba(90,159,255,0.45)' : 'rgba(255,255,255,0.05)'}`,
+                  boxShadow:   active === i ? '0 0 20px rgba(90,159,255,0.12)' : 'none',
+                  transition:  'border-color 0.5s, box-shadow 0.5s',
                 }}
               >
-                {/* inner grid */}
-                <div className="absolute inset-0 pointer-events-none"
-                  style={{
-                    backgroundImage: 'linear-gradient(rgba(61,126,255,0.04) 1px, transparent 1px), linear-gradient(90deg, rgba(61,126,255,0.04) 1px, transparent 1px)',
-                    backgroundSize: '20px 20px',
-                  }} />
-                <div className="absolute inset-0 flex items-center justify-center">
-                  <span className="font-mono text-[8px] text-blue/18 tracking-[0.1em]">photo</span>
-                </div>
+                <img
+                  src={PHOTOS[i]}
+                  alt={photo.label}
+                  className="absolute inset-0 w-full h-full object-cover"
+                  style={{ transition: 'transform 0.5s ease', transform: active === i ? 'scale(1.04)' : 'scale(1)' }}
+                />
+                {/* overlay */}
+                <div className="absolute inset-0" style={{ background: 'rgba(2,2,8,0.25)' }} />
                 {/* bottom label */}
-                <div className="absolute bottom-0 left-0 right-0" style={{ background: 'linear-gradient(to top, rgba(2,2,8,0.92), transparent)', padding: '20px 10px 10px' }}>
-                  <span className="font-body text-[9px] font-medium block" style={{ color: active === i ? '#dde4ff' : '#5a6490', transition: 'color 0.4s' }}>
+                <div
+                  className="absolute bottom-0 left-0 right-0"
+                  style={{ background: 'linear-gradient(to top, rgba(2,2,8,0.92), transparent)', padding: '20px 10px 10px' }}
+                >
+                  <span
+                    className="font-body font-medium block"
+                    style={{ fontSize: 'clamp(8px,1vw,9px)', color: active === i ? '#dde4ff' : '#5a6490', transition: 'color 0.4s' }}
+                  >
                     {photo.label}
                   </span>
                 </div>

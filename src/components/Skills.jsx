@@ -1,6 +1,10 @@
 import { useInView } from '../hooks/useInView'
 import { skills } from '../data/content'
 import SectionLabel from './SectionLabel'
+import claudeIcon from "../assets/icons/claude.png";
+import midjourneyIcon from "../assets/icons/midjourney.png";
+import v0Icon from "../assets/icons/v0.png";
+import cursorIcon from "../assets/icons/cursor.png";
 
 
 const DEVICONS = {
@@ -14,13 +18,13 @@ const DEVICONS = {
   'Node.js':           'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/nodejs/nodejs-original.svg',
   'Express.js':        'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/express/express-original.svg',
   'SQL':               'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/mysql/mysql-original.svg',
-  'Claude':     '/icons/claude.png',
-  'Midjourney': '/icons/midjourney.png',
-  'v0':         '/icons/v0.png',
-  'Cursor AI':  '/icons/cursor.png',
+  'Claude':            claudeIcon,
+  'Midjourney':        midjourneyIcon,
+  'v0':                v0Icon,
+  'Cursor AI':         cursorIcon,
 }
 
-const WHITE_ICONS = new Set(['Express.js', 'Adobe Suite', 'Next.js'])
+const WHITE_ICONS = new Set(['Express.js', 'Adobe Suite'])
 
 const FALLBACK = {
   'User Research':     '🔍',

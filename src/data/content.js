@@ -194,14 +194,18 @@ export const community = {
 
 export const shelf = {
   books: [
-    { title: 'The Design of Everyday Things', author: 'Don Norman',  reaction: 'Changed how I see every door handle.' },
-    { title: 'Atomic Habits',                 author: 'James Clear',  reaction: 'Systems over goals. Still practicing it.' },
-    { title: 'Sprint',                         author: 'Jake Knapp',  reaction: 'Five days to a prototype. Underrated.' },
+    { title: "I Can't Say Goodbye to You", author: "Ritvik Singh", reaction: "A story that stays with you longer than expected." },
+    { title: "The Man Who Thought Different", author: "Karen Blumenthal", reaction: "A perspective-shifting read on thinking beyond norms." },
+    { title: "Deewar Mein Ek Khidki Rehti Hai", author: "Vinod Kumar Shukla", reaction: "Simple yet deeply poetic and reflective." },
   ],
-  quote:   { text: 'Design is not just what it looks like and feels like. Design is how it works.', by: 'Steve Jobs' },
-  funFact: 'I once designed 40 logo variations before going back to the very first one.',
-  interests: ['Digital Art', 'Travel', 'Community Building', 'Esports'],
-}
+  quote: {
+    text: "Design is not just what it looks like and feels like. Design is how it works.",
+    by: "Steve Jobs",
+  },
+  funFact:
+    "I once designed 40 logo variations before going back to the very first one.",
+  interests: ["Digital Art", "Travel", "Community Building", "Esports"],
+};
 
 export const navLinks = [
   { label: 'Work',    href: '#projects' },

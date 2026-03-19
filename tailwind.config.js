@@ -4,10 +4,10 @@ export default {
   theme: {
     extend: {
       colors: {
-        bg:      '#020208',
+        bg:      '#000000',
         surface: '#05060e',
         card:    '#080a14',
-        blue:    '#6eb3ff',
+        blue:    '#1a3aff',
         'blue-b':'#6b9fff',
         cyan:    '#00e5ff',
         green:   '#00ff88',
