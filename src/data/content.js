@@ -5,7 +5,7 @@ export const meta = {
   email:    'manish.uiux02@gmail.com',
   phone:    '+91 79765 36393',
   github:   'https://github.com/IamManishVaishnav',
-  linkedin: 'https://linkedin.com/in/manish-vaishnav',
+  linkedin: 'https://linkedin.com/in/manish-uiux',
 }
 
 export const heroLine = "Most devs can't design. Most designers can't code. I do both."
