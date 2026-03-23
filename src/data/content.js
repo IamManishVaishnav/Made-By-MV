@@ -92,7 +92,7 @@ export const projects = [
     tags:      ['JavaScript', 'Chrome API', 'UI/UX'],
     category:  'Development',
     year:      '2024',
-    type:      'casestudy',
+    type:      'external',
     link:      'https://github.com/IamManishVaishnav/Moodsy',
     featured:  true,
   },
