@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react'
 import { meta } from '../data/content'
-import pfp from '../assets/pfp2.jpg'
+import pfp from '../assets/img.jpg'
 import Resume from '../assets/Resume.pdf'
 
 export default function Hero() {
@@ -123,12 +123,12 @@ export default function Hero() {
         <p
           className="font-mono animate-fade-in"
           style={{
-            fontSize:       'clamp(9px,1.2vw,13px)',
-            color:          'rgba(221,228,255,0.28)',
+            fontSize:       'clamp(15px,1.2vw,20px)',
+            color:          'white',
             letterSpacing:  '0.04em',
             animationDelay: '0.3s',
             marginBottom:   'clamp(20px,4vw,52px)',
-            maxWidth:       'min(520px, 86vw)',
+            maxWidth:       'min(800px, 200vw)',
             lineHeight:     1.6,
           }}
         >

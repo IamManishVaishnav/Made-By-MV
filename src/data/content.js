@@ -92,8 +92,8 @@ export const projects = [
     tags:      ['JavaScript', 'Chrome API', 'UI/UX'],
     category:  'Development',
     year:      '2024',
-    type:      'external',
-    link:      '#',
+    type:      'casestudy',
+    link:      'https://github.com/IamManishVaishnav/Moodsy',
     featured:  true,
   },
   {
@@ -117,7 +117,7 @@ export const projects = [
     category:  'UI/UX',
     year:      '2025',
     type:      'casestudy',
-    link:      '/work/autotext',
+    link:      'https://www.figma.com/design/nXruSVWkKwJ9gRpLGv5mBY/Autotext-AI-Revamp?node-id=0-1&t=NDKRH71nlwRWuGNa-1',
     featured:  true,
   },
   {
@@ -141,7 +141,7 @@ export const projects = [
     category:  'UI/UX',
     year:      '2025',
     type:      'casestudy',
-    link:      '/work/tarqa',
+    link:      'https://tarqa.vercel.app',
     featured:  false,
   },
   {
@@ -152,8 +152,8 @@ export const projects = [
     tags:      ['React.js', 'Node.js', 'Chart.js'],
     category:  'Development',
     year:      '2024',
-    type:      'external',
-    link:      '#',
+    type:      'casestudy',
+    link:      'https://github.com/IamManishVaishnav/Feedback-Analyzer',
     featured:  false,
   },
   {
@@ -165,7 +165,7 @@ export const projects = [
     category:  'Graphics',
     year:      '2021–',
     type:      'archive',
-    link:      '/archive',
+    link:      'https://drive.google.com/drive/u/0/folders/1EHvp3f8loxKE4Q7hvWraYGduTRD08zho',
     featured:  false,
   },
 ]

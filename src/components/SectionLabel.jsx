@@ -5,7 +5,7 @@ export default function SectionLabel({ children }) {
         className="inline-block w-4 h-px bg-blue flex-shrink-0"
         style={{ boxShadow: '0 0 6px #3d7eff' }}
       />
-      <span className="font-mono text-[10px] tracking-[0.22em] text-blue uppercase">
+      <span className="font-mono text-[12px] tracking-[0.22em] text-'text-mid' uppercase">
         {children}
       </span>
     </div>

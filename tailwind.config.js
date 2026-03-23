@@ -3,18 +3,7 @@ export default {
   content: ['./index.html', './src/**/*.{js,jsx,ts,tsx}'],
   theme: {
     extend: {
-      colors: {
-        bg:      '#000000',
-        surface: '#05060e',
-        card:    '#080a14',
-        blue:    '#1a3aff',
-        'blue-b':'#6b9fff',
-        cyan:    '#00e5ff',
-        green:   '#00ff88',
-        text:    '#dde4ff',
-        mid:     '#5a6490',
-        dim:     '#1e2440',
-      },
+colors: { bg: '#000000', surface: '#05060e', card: '#080a14', blue: '#1a3aff', 'blue-b':'#6b9fff', cyan: '#00e5ff', green: '#00ff88', text: '#dde4ff', mid: '#5a6490', dim: '#1e2440', },
       fontFamily: {
         display: ['"Bricolage Grotesque"', 'sans-serif'],
         body:    ['Manrope', 'sans-serif'],

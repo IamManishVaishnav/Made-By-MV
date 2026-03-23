@@ -4,6 +4,24 @@ import { useInView } from '../hooks/useInView'
 import { projects } from '../data/content'
 import SectionLabel from './SectionLabel'
 
+import moodsyImg   from '../assets/moodsy.png'
+import mentalxpImg from '../assets/mentalxp.png'
+import autotextImg from '../assets/autotext.png'
+import vynoxImg    from '../assets/vynox.png'
+import tarqaImg    from '../assets/tarqa.png'
+import feedbackImg from '../assets/feedback.png'
+import graphicsImg from '../assets/graphics.png'
+
+const PROJECT_IMAGES = {
+  'Moodsy':            moodsyImg,
+  'MentalXP':          mentalxpImg,
+  'AutoText UI':       autotextImg,
+  'Vynox Media':       vynoxImg,
+  'Tarqa AI':          tarqaImg,
+  'Feedback Analyzer': feedbackImg,
+  'Graphic Design':    graphicsImg,
+}
+
 const CAT = {
   'UI/UX':       { color: '#6eb3ff', bg: 'rgba(61,126,255,0.06)',  border: 'rgba(61,126,255,0.18)',  glow: 'rgba(61,126,255,0.07)'  },
   'Development': { color: '#6eb3ff', bg: 'rgba(0,229,255,0.05)',   border: 'rgba(0,229,255,0.15)',   glow: 'rgba(0,229,255,0.05)'   },
@@ -18,7 +36,8 @@ const TYPE_LABEL = {
 
 function ProjectRow({ project, i, inView }) {
   const [hovered, setHovered] = useState(false)
-  const cat = CAT[project.category] || CAT['UI/UX']
+  const cat   = CAT[project.category] || CAT['UI/UX']
+  const image = PROJECT_IMAGES[project.title]
 
   const inner = (
     <div
@@ -105,18 +124,28 @@ function ProjectRow({ project, i, inView }) {
             zIndex:       20,
           }}
         >
-          <div className="absolute inset-0" style={{ background: 'linear-gradient(135deg, #080c1a, #060810)' }} />
-          <div className="absolute inset-0" style={{ backgroundImage: 'linear-gradient(rgba(61,126,255,0.06) 1px, transparent 1px), linear-gradient(90deg, rgba(61,126,255,0.06) 1px, transparent 1px)', backgroundSize: '18px 18px' }} />
-          <div className="absolute inset-0" style={{ background: `radial-gradient(ellipse at 50% 50%, ${cat.glow}, transparent 60%)` }} />
-          <div className="absolute inset-0 flex items-center justify-center">
-            <span className="font-mono text-[8px] tracking-[0.15em]" style={{ color: `${cat.color}44` }}>mockup.png</span>
-          </div>
+          {image ? (
+            <>
+              <img
+                src={image}
+                alt={project.title}
+                style={{ width: '100%', height: '100%', objectFit: 'cover', opacity: 0.92 }}
+              />
+              <div className="absolute inset-0" style={{ background: `linear-gradient(135deg, rgba(0,0,0,0.1), rgba(0,0,0,0.3))` }} />
+            </>
+          ) : (
+            <>
+              <div className="absolute inset-0" style={{ background: 'linear-gradient(135deg, #080c1a, #060810)' }} />
+              <div className="absolute inset-0" style={{ backgroundImage: 'linear-gradient(rgba(61,126,255,0.06) 1px, transparent 1px), linear-gradient(90deg, rgba(61,126,255,0.06) 1px, transparent 1px)', backgroundSize: '18px 18px' }} />
+              <div className="absolute inset-0 flex items-center justify-center">
+                <span className="font-mono text-[8px] tracking-[0.15em]" style={{ color: `${cat.color}44` }}>mockup.png</span>
+              </div>
+            </>
+          )}
         </div>
 
-        {/* right — year + type badge + cta */}
+        {/* right */}
         <div className="flex items-center gap-4 flex-shrink-0">
-
-          {/* type badge — always visible */}
           <span
             className="font-mono text-[8px] tracking-[0.1em] uppercase rounded-[4px] hidden md:block transition-all duration-300"
             style={{
@@ -131,7 +160,6 @@ function ProjectRow({ project, i, inView }) {
 
           <span className="font-mono text-[10px] hidden md:block" style={{ color: '#8892b0' }}>{project.year}</span>
 
-          {/* CTA on hover */}
           <div
             style={{
               opacity:    hovered ? 1 : 0,
@@ -141,24 +169,15 @@ function ProjectRow({ project, i, inView }) {
           >
             <span
               className="font-mono text-[9px] tracking-[0.1em] uppercase rounded-[5px] flex items-center gap-2"
-              style={{
-                padding:    '7px 14px',
-                background: cat.color,
-                color:      '#020208',
-                whiteSpace: 'nowrap',
-              }}
+              style={{ padding: '7px 14px', background: cat.color, color: '#020208', whiteSpace: 'nowrap' }}
             >
               {TYPE_LABEL[project.type]}
             </span>
           </div>
 
-          {/* arrow default */}
           <span
             className="font-mono text-[20px] flex-shrink-0 transition-all duration-300"
-            style={{
-              color:     hovered ? 'transparent' : '#8892b0',
-              transform: hovered ? 'translate(3px,-3px)' : 'translate(0,0)',
-            }}
+            style={{ color: hovered ? 'transparent' : '#8892b0', transform: hovered ? 'translate(3px,-3px)' : 'translate(0,0)' }}
           >
             ↗
           </span>
@@ -174,7 +193,6 @@ function ProjectRow({ project, i, inView }) {
     style: { display: 'block', textDecoration: 'none' },
   }
 
-  // route based on type
   if (project.type === 'external') {
     return (
       <div style={{ opacity: inView ? 1 : 0, transform: inView ? 'translateY(0)' : 'translateY(18px)', transition: `opacity 0.55s ease ${i * 0.07}s, transform 0.55s ease ${i * 0.07}s` }}>
@@ -191,7 +209,6 @@ function ProjectRow({ project, i, inView }) {
     )
   }
 
-  // casestudy
   return (
     <div style={{ opacity: inView ? 1 : 0, transform: inView ? 'translateY(0)' : 'translateY(18px)', transition: `opacity 0.55s ease ${i * 0.07}s, transform 0.55s ease ${i * 0.07}s` }}>
       <Link to={project.link} {...sharedProps}>{inner}</Link>
