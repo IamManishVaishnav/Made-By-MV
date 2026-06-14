@@ -8,6 +8,7 @@ import Quotes from './pages/Quotes'
 import Navbar from './components/Navbar'
 import Vynox from './pages/work/Vynox'
 import Resume from './components/Resume'
+import AutoTextCaseStudy from './pages/work/AutoText'
 
 export default function App() {
   const alreadyLoaded = sessionStorage.getItem('mv_loaded') === '1'
@@ -33,6 +34,7 @@ export default function App() {
           <Route path="/archive" element={<Archive />} />
           <Route path="/quotes"  element={<Quotes />} />
           <Route path="/work/vynox" element={<Vynox />} />
+          <Route path="/work/autotext" element={<AutoTextCaseStudy />} />
           <Route path="/resume" element={<Resume />} />
         </Routes>
       </div>

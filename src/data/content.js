@@ -117,7 +117,8 @@ export const projects = [
     category:  'UI/UX',
     year:      '2025',
     type:      'casestudy',
-    link:      'https://www.figma.com/design/nXruSVWkKwJ9gRpLGv5mBY/Autotext-AI-Revamp?node-id=0-1&t=NDKRH71nlwRWuGNa-1',
+    link: '/work/autotext',
+    figmalink:      'https://www.figma.com/design/nXruSVWkKwJ9gRpLGv5mBY/Autotext-AI-Revamp?node-id=0-1&t=NDKRH71nlwRWuGNa-1',
     featured:  true,
   },
   {
